@@ -1,0 +1,4 @@
+CREATE DATABASE IF NOT EXISTS lsmart_environment;
+CREATE USER IF NOT EXISTS 'pw2user'@'%' IDENTIFIED BY 'pw2pass';
+GRANT ALL PRIVILEGES ON lsmart_environment.* TO 'pw2user'@'%';
+FLUSH PRIVILEGES;

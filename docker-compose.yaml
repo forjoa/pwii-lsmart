@@ -26,6 +26,10 @@ services:
       - mysql
 
   mysql:
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 3s
+      retries: 10
     image: mysql:9.2.0
     platform: linux/amd64
     container_name: ${PROJECT_PREFIX}_${PROJECT_NAME}_mysql
@@ -37,10 +41,10 @@ services:
       SERVICE_NAME: mysql
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_DATABASE: ${PROJECT_PREFIX}_${DB_DATABASE}
+      MYSQL_DATABASE: lsmart_environment
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     volumes:
-      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+      - ./docker-compose/mysql/initdb:/docker-entrypoint-initdb.d
     networks:
       - pw2_network
 

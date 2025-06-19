@@ -32,7 +32,7 @@
             <p class="text-gray-600">Conversaciones inteligentes al instante</p>
             
             <div class="space-y-4">
-                <a href="/login" class="w-full bg-primary text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors font-medium">
+                <a href="/auth" class="w-full bg-primary text-white py-3 px-6 rounded-lg hover:bg-blue-600 transition-colors font-medium">
                     Comenzar Chat
                 </a>
             </div>
