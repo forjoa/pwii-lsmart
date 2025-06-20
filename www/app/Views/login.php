@@ -50,7 +50,7 @@
 
             <div id="loginForm" class="bg-white p-8 rounded-lg shadow-md">
                 <h3 class="text-xl font-semibold mb-6 text-center">Iniciar Sesión</h3>
-                <form action="/signin" method="POST" class="space-y-4">
+                <form action="/sign-in" method="POST" class="space-y-4">
                     <div>
                         <input type="email" name="email" placeholder="Email" required value="<?= old('email') ?>"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary">
@@ -72,7 +72,7 @@
                 </form>
                 <p class="text-center text-sm text-gray-600 mt-4">
                     ¿No tienes cuenta?
-                    <a href="/register" class="text-primary hover:underline font-medium">Regístrate</a>
+                    <a href="/sign-up" class="text-primary hover:underline font-medium">Regístrate</a>
                 </p>
             </div>
         </div>

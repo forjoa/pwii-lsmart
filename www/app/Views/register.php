@@ -48,8 +48,7 @@
                     </div>
                 <?php endif ?>
 
-                <form action="/signup" method="POST" enctype="multipart/form-data" class="space-y-4">
-                    <!-- Profile Picture -->
+                <form action="/sign-up" method="POST" enctype="multipart/form-data" class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Foto de perfil (opcional)</label>
                         <div class="flex items-center">
@@ -111,7 +110,7 @@
 
                 <p class="text-center text-sm text-gray-600 mt-4">
                     ¿Ya tienes cuenta?
-                    <a href="/login" class="text-primary hover:underline font-medium">Inicia sesión</a>
+                    <a href="/sign-in" class="text-primary hover:underline font-medium">Inicia sesión</a>
                 </p>
             </div>
         </div>

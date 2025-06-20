@@ -1,7 +1,45 @@
 <?= $this->extend('layouts/dashboard_layout') ?>
 
+<?= $this->section('conversations') ?>
+<?php if (sizeof($conversations) > 0) { ?>
+    <?php foreach ($conversations as $conversation) { ?>
+        <button onclick="location.href='/chat/<?= $conversation['id'] ?>'"
+            class="bg-gray-800 w-full hover:bg-gray-700 p-3 rounded-lg cursor-pointer transition-colors">
+            <div class="font-medium truncate"><?= $conversation['title'] ?></div>
+            <div class="text-xs text-gray-400 mt-1"><?= $conversation['date'] ?></div>
+        </button>
+    <?php } ?>
+<?php } else { ?>
+    <div class="p-3 rounded-lg">
+        <div class="font-medium truncate">No tienes chats</div>
+    </div>
+<?php } ?>
+<?= $this->endSection() ?>
+
+<?= $this->section('user') ?>
+<div class="p-4 border-t border-gray-700">
+    <div class="flex items-center space-x-3">
+        <div class="bg-secondary w-8 h-8 rounded-full flex items-center justify-center">
+            <span class="text-sm font-medium"><?= strtoupper(str_split($username)[0] ?? '') ?></span>
+        </div>
+        <div class="flex-1 truncate">
+            <div class="font-medium"><?= $username ?></div>
+            <div class="text-xs text-gray-400"><?= $email ?></div>
+        </div>
+    </div>
+</div>
+<button onclick="location.href='/logout'"
+    class="hover:bg-red-900 text-red-600 py-2 rounded-lg transition-colors flex items-center justify-center space-x-2 m-2">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 8H5a2 2 0 01-2-2V6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2h-1" />
+    </svg>
+    <span>Salir</span>
+</button>
+<?= $this->endSection() ?>
+
 <?= $this->section('content') ?>
-<div class="flex-1 flex flex-col">
+<div class="flex-1 flex flex-col min-h-screen">
     <button id="toggleBtn" onclick="toggleSidebar()"
         class="absolute top-4 left-4 z-10 bg-gray-900 text-white p-2 rounded-lg hidden">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

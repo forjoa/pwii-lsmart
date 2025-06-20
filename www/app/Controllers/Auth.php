@@ -101,7 +101,7 @@ class Auth extends BaseController
 
         try {
             $userModel->insert($data);
-            return redirect()->to('/login')->with('message', 'Registration successful! Please login.');
+            return redirect()->to('/sign-in')->with('message', 'Registration successful! Please login.');
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('error', 'An error occurred during registration. Please try again.');
         }
@@ -154,18 +154,18 @@ class Auth extends BaseController
             'user_id' => $user['id'],
             'email' => $user['email'],
             'username' => $user['username'],
-            'profile_picture' => $user['profile_picture'],
+            'profile_picture' => $user['profile_picture'] ?? 'default-profile.jpg',
             'logged_in' => true
         ]);
 
         // redirect to chats
-        return redirect()->to('/dashboard');
+        return redirect()->to('/');
     }
 
     public function logout()
     {
         $session = session();
         $session->destroy();
-        return redirect()->to('/login');
+        return redirect()->to('/sign-in');
     }
 }
