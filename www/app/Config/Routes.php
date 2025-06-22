@@ -20,3 +20,4 @@ $routes->get('/logout', [Auth::class, 'logout']);
 
 // dashboard
 $routes->get('/', [Dashboard::class, 'index']);
+$routes->get('/chat/(:num)', [Dashboard::class, 'chat']);

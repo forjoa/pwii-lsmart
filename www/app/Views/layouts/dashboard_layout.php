@@ -19,6 +19,18 @@
             }
         }
     </script>
+    <style>
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1.2em;
+            padding-right: 2.5rem;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-50 h-screen overflow-hidden">
@@ -53,7 +65,7 @@
             </div>
 
             <div class="flex-1 overflow-y-auto p-4 space-y-2">
-                <?= $this->renderSection('conversations')?>
+                <?= $this->renderSection('conversations') ?>
             </div>
 
             <?= $this->renderSection('user') ?>
