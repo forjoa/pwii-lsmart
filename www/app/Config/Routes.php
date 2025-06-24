@@ -21,3 +21,5 @@ $routes->get('/logout', [Auth::class, 'logout']);
 // dashboard
 $routes->get('/', [Dashboard::class, 'index']);
 $routes->get('/chat/(:num)', [Dashboard::class, 'chat']);
+
+$routes->post('/send-message', [Dashboard::class, 'sendMessage']);
