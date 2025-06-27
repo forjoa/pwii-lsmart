@@ -65,12 +65,19 @@
     <?php } else { ?>
         <div class="flex-1 overflow-y-auto p-6">
             <div class="max-w-3xl mx-auto space-y-4">
+                <?php
+                $parsedown = new Parsedown();
+                $parsedown->setSafeMode(true);
+                ?>
+
                 <?php foreach ($messages as $message): ?>
                     <?php if ($message['is_user_message']): ?>
                         <div class="flex justify-end">
                             <div class="max-w-[85%] lg:max-w-[75%]">
                                 <div class="bg-primary text-white rounded-lg p-4">
-                                    <p class="whitespace-pre-wrap"><?= htmlspecialchars($message['content']) ?></p>
+                                    <div class="bg-primary text-white rounded-lg p-4 markdown-content">
+                                        <?= $parsedown->text($message['content']) ?>
+                                    </div>
                                 </div>
                                 <div class="text-xs text-gray-500 mt-1 text-right">
                                     <?= date('H:i', strtotime($message['created_at'])) ?>
@@ -82,7 +89,9 @@
                         <div class="flex justify-start">
                             <div class="max-w-[85%] lg:max-w-[75%]">
                                 <div class="bg-gray-100 rounded-lg p-4">
-                                    <p class="whitespace-pre-wrap"><?= htmlspecialchars($message['content']) ?></p>
+                                    <div class="rounded-lg p-4 markdown-content">
+                                        <?= $parsedown->text($message['content']) ?>
+                                    </div>
                                 </div>
                                 <div class="text-xs text-gray-500 mt-1">
                                     <?= date('H:i', strtotime($message['created_at'])) ?>
@@ -100,15 +109,17 @@
             <form action="/send-message" method="POST" id="messageForm">
                 <input type="hidden" name="conversation_id" value="<?= $conversation_id ?? '' ?>">
                 <div class="mb-3">
-                    <select name="model"
-                        class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
-                        required value="<?= $groq_models[0] ?>">
-                        <?php foreach ($groq_models as $modelId): ?>
-                            <option value="<?= htmlspecialchars($modelId) ?>">
-                                <?= htmlspecialchars($modelId) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+                    <div class="mb-3">
+                        <select name="model"
+                            class="bg-gray-100 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
+                            required>
+                            <?php foreach ($groq_models as $modelId): ?>
+                                <option value="<?= htmlspecialchars($modelId) ?>" <?= ($modelId === 'llama-3.3-70b-versatile') ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($modelId) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="flex space-x-3">

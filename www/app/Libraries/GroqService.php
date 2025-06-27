@@ -85,4 +85,40 @@ class GroqService
             ];
         }
     }
+
+    public function messageWithContext($model, $messages)
+    {
+        try {
+            $response = $this->client->post('chat/completions', [
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $this->apiKey,
+                    'Content-Type' => 'application/json',
+                ],
+                'json' => [
+                    'model' => $model,
+                    'messages' => $messages,
+                    'temperature' => 0.7,
+                    'max_tokens' => 1024
+                ]
+            ]);
+
+            $responseData = json_decode($response->getBody(), true);
+
+            return [
+                'success' => true,
+                'response' => $responseData['choices'][0]['message']['content'],
+                'full_response' => $responseData
+            ];
+
+        } catch (RequestException $e) {
+            $errorResponse = $e->hasResponse() ? json_decode($e->getResponse()->getBody(), true) : null;
+
+            return [
+                'success' => false,
+                'status_code' => $e->getCode(),
+                'message' => $errorResponse['error']['message'] ?? $e->getMessage(),
+                'type' => $errorResponse['error']['type'] ?? null
+            ];
+        }
+    }
 }
