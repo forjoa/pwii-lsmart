@@ -13,7 +13,7 @@ class Dashboard extends BaseController
     {
         $data['username'] = session()->get('username') ?? 'Invitado';
         $data['email'] = session()->get('email') ?? '';
-        $data['profile_picture'] = session()->get('profile_picture');
+        $data['profile_pic'] = session()->get('profile_pic');
         $data['user_id'] = session()->get('user_id');
 
         $conversationModel = new ConversationModel();
@@ -37,7 +37,7 @@ class Dashboard extends BaseController
     {
         $data['username'] = session()->get('username') ?? 'Invitado';
         $data['email'] = session()->get('email') ?? '';
-        $data['profile_picture'] = session()->get('profile_picture');
+        $data['profile_pic'] = session()->get('profile_pic');
         $data['user_id'] = session()->get('user_id');
 
         $conversationModel = new ConversationModel();

@@ -154,7 +154,7 @@ class Auth extends BaseController
             'user_id' => $user['id'],
             'email' => $user['email'],
             'username' => $user['username'],
-            'profile_picture' => $user['profile_picture'] ?? 'default-profile.jpg',
+            'profile_pic' => $user['profile_pic'] ?? 'default-profile.jpg',
             'logged_in' => true
         ]);
 

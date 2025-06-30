@@ -103,7 +103,11 @@
 <button onclick="location.href='/profile'" class="p-4 border-t border-gray-700">
     <div class="flex items-center space-x-3">
         <div class="bg-secondary w-8 h-8 rounded-full flex items-center justify-center">
-            <span class="text-sm font-medium"><?= strtoupper(str_split($username)[0] ?? '') ?></span>
+            <?php if (!empty($profile_pic)) { ?>
+                <img src="<?= base_url($profile_pic) ?>" alt="Foto de perfil" class="w-8 h-8 rounded-full object-cover">
+            <?php } else { ?>
+                <span class="text-sm font-medium"><?= strtoupper(str_split($username)[0] ?? '') ?></span>
+            <?php } ?>
         </div>
         <div class="flex-1 truncate">
             <div class="font-medium"><?= $username ?></div>

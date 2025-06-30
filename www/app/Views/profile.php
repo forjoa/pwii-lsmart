@@ -45,7 +45,7 @@
                     class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
                     Editar
                 </button>
-                <form action="/logout" method="POST" class="inline">
+                <form action="/logout" method="GET" class="inline">
                     <button type="submit"
                         class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors">
                         Cerrar Sesión
