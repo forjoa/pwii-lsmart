@@ -79,7 +79,7 @@ class Auth extends BaseController
 
         if ($profilePicture->isValid() && !$profilePicture->hasMoved()) {
             $newName = $profilePicture->getRandomName();
-            $profilePicture->move(WRITEPATH . 'uploads/profiles', $newName);
+            $profilePicture->move(FCPATH . 'uploads/profiles', $newName);
             $profilePath = 'uploads/profiles/' . $newName;
         }
 

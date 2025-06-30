@@ -61,8 +61,7 @@
                 <div class="flex items-center space-x-6">
                     <div class="relative">
                         <?php if (!empty($user['profile_pic'])): ?>
-                            <img src="<?= esc($user['profile_pic']) ?>" alt="Foto de perfil"
-                                class="w-24 h-24 rounded-full object-cover">
+                            <img src="<?= base_url($user['profile_pic']) ?>" alt="Foto de perfil" class="w-24 h-24 rounded-full object-cover">
                         <?php else: ?>
                             <div class="w-24 h-24 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
                                 <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">

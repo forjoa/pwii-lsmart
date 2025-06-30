@@ -34,43 +34,65 @@ class Profile extends BaseController
         $user = $userModel->find($userId);
 
         if (!$user) {
-            return redirect()->to('/logout');
+            return redirect()->to('/logout')->with('error', 'Usuario no encontrado');
         }
 
         $rules = [
             'username' => 'required|min_length[3]|max_length[30]',
             'age' => 'permit_empty|numeric|greater_than[0]|less_than[120]',
-            'profile_pic' => 'uploaded[profile_pic]|max_size[profile_pic,2048]|is_image[profile_pic]|ext_in[profile_pic,jpg,jpeg,png]',
+            'profile_pic' => [
+                'uploaded[profile_pic]',
+                'max_size[profile_pic,2048]',
+                'mime_in[profile_pic,image/jpg,image/jpeg,image/png]',
+                'ext_in[profile_pic,jpg,jpeg,png]'
+            ],
             'password' => 'permit_empty|min_length[8]|matches[password_confirmation]'
         ];
 
+        if (!$this->validate($rules)) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+
         $data = [
-            'username' => $this->request->getPost('username'),
+            'username' => esc($this->request->getPost('username')),
             'age' => $this->request->getPost('age'),
             'updated_at' => date('Y-m-d H:i:s')
         ];
 
-        $password = $this->request->getPost('password');
-        if (!empty($password)) {
-            $data['password'] = password_hash($password, PASSWORD_DEFAULT);
+        if ($password = $this->request->getPost('password')) {
+            $data['password'] = password_hash($password, PASSWORD_BCRYPT);
         }
 
         $profilePic = $this->request->getFile('profile_pic');
-        if ($profilePic && $profilePic->isValid() && !$profilePic->hasMoved()) {
+        if ($profilePic && $profilePic->isValid()) {
             $newName = $profilePic->getRandomName();
-            $profilePic->move(WRITEPATH . 'uploads/profile_pics', $newName);
-            $data['profile_pic'] = 'uploads/profile_pics/' . $newName;
+            $uploadPath = FCPATH . 'uploads/profiles'; 
 
-            if (!empty($user['profile_pic']) && strpos($user['profile_pic'], 'default') === false) {
-                @unlink(WRITEPATH . $user['profile_pic']);
+            if (!is_dir($uploadPath)) {
+                mkdir($uploadPath, 0777, true);
+            }
+
+            if ($profilePic->move($uploadPath, $newName)) {
+                $data['profile_pic'] = 'uploads/profiles/' . $newName;
+
+                if (
+                    !empty($user['profile_pic']) &&
+                    strpos($user['profile_pic'], 'default') === false &&
+                    file_exists(FCPATH . $user['profile_pic'])
+                ) {
+                    unlink(FCPATH . $user['profile_pic']);
+                }
             }
         }
 
-        
-        if ($userModel->update($userId, $data)) {
+        try {
+            $userModel->update($userId, $data);
             return redirect()->to('/profile')->with('success', 'Perfil actualizado correctamente');
-        } else {
-            return redirect()->back()->withInput()->with('error', 'Error al actualizar el perfil');
+        } catch (\Exception $e) {
+            if (isset($newName)) {
+                @unlink(FCPATH . 'uploads/profiles/' . $newName);
+            }
+            return redirect()->back()->withInput()->with('error', 'Error al actualizar: ' . $e->getMessage());
         }
     }
 
