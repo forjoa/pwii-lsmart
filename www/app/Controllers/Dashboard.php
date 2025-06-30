@@ -65,75 +65,41 @@ class Dashboard extends BaseController
         return view('dashboard', $data);
     }
 
-    // public function sendMessage()
-    // {
-    //     $conversation_id = $this->request->getPost('conversation_id');
-    //     $message = $this->request->getPost('message');
-    //     $model = $this->request->getPost('model');
-    //     $user_id = session()->get('user_id');
+    public function delete($id)
+    {
+        if (!session()->has('user_id')) {
+            return redirect()->to('/login')->with('error', 'Por favor inicia sesión primero');
+        }
 
-    //     if (empty($user_id)) {
-    //         return redirect()->to('/sign-in')->with('message', 'Debes iniciar sesión.');
-    //     }
+        $userId = session()->get('user_id');
+        $conversationModel = new ConversationModel();
+        $messageModel = new MessageModel();
 
-    //     if (empty($message) || empty($model)) {
-    //         return redirect()->back()->withInput()->with('error', 'Todos los campos son requeridos');
-    //     }
+        $conversation = $conversationModel->where('id', $id)
+            ->where('user_id', $userId)
+            ->first();
 
-    //     $db = Database::connect();
-    //     $db->transStart();
+        if (!$conversation) {
+            return redirect()->back()->with('error', 'Conversación no encontrada o no tienes permisos');
+        }
 
-    //     try {
-    //         $conversationModel = new ConversationModel();
-    //         $messageModel = new MessageModel();
+        $db = Database::connect();
+        $db->transStart();
 
-    //         if (empty($conversation_id)) {
-    //             $words = preg_split('/\s+/', trim($message));
-    //             $title = implode(' ', array_slice($words, 0, 3));
+        try {
+            $messageModel->where('conversation_id', $id)->delete();
 
-    //             $conversationData = [
-    //                 'user_id' => $user_id,
-    //                 'title' => $title,
-    //                 'date' => date('Y-m-d H:i:s'),
-    //                 'model_used' => $model
-    //             ];
+            $conversationModel->delete($id);
 
-    //             $conversation_id = $conversationModel->insert($conversationData);
-    //         }
+            $db->transComplete();
 
-    //         $userMessageData = [
-    //             'conversation_id' => $conversation_id,
-    //             'is_user_message' => 1,
-    //             'content' => $message,
-    //             'created_at' => date('Y-m-d H:i:s')
-    //         ];
-    //         $messageModel->insert($userMessageData);
+            return redirect()->back()->with('success', 'Conversación eliminada correctamente');
+        } catch (\Exception $e) {
+            $db->transRollback();
+            return redirect()->back()->with('error', 'Error al eliminar la conversación: ' . $e->getMessage());
+        }
+    }
 
-    //         $groqService = new GroqService();
-    //         $response = $groqService->message($model, $message);
-
-    //         if (isset($response['error'])) {
-    //             throw new \Exception($response['message']);
-    //         }
-
-    //         $aiMessageData = [
-    //             'conversation_id' => $conversation_id,
-    //             'is_user_message' => 0,
-    //             'content' => $response['response'],
-    //             'created_at' => date('Y-m-d H:i:s')
-    //         ];
-    //         $messageModel->insert($aiMessageData);
-
-    //         $db->transComplete();
-
-    //         return redirect()->to("/chat/$conversation_id")->with('success', 'Mensaje enviado');
-
-    //     } catch (\Exception $e) {
-    //         $db->transRollback();
-    //         log_message('error', 'Error en sendMessage: ' . $e->getMessage());
-    //         return redirect()->back()->withInput()->with('error', 'Error al procesar el mensaje: ' . $e->getMessage());
-    //     }
-    // }
     public function sendMessage()
     {
         $conversation_id = $this->request->getPost('conversation_id');
@@ -230,12 +196,12 @@ class Dashboard extends BaseController
     private function generateConversationTitle($model, $prompt)
     {
         $groqService = new GroqService();
-        $response = $groqService->message($model, 'Solo debes devolver el título lo más corto posible en español sobre la siguiente pregunta: '.$prompt);
+        $response = $groqService->message($model, 'Solo debes devolver el título lo más corto posible en español sobre la siguiente pregunta: ' . $prompt);
 
         if ($response['success']) {
             $title = trim($response['response']);
-            $title = preg_replace('/^"|"$/', '', $title); 
-            $title = substr($title, 0, 50); 
+            $title = preg_replace('/^"|"$/', '', $title);
+            $title = substr($title, 0, 50);
             return ['success' => true, 'response' => $title];
         }
 

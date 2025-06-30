@@ -1,6 +1,7 @@
 <?php
 use App\Controllers\Auth;
 use App\Controllers\Dashboard;
+use App\Controllers\Profile;
 use CodeIgniter\Router\RouteCollection;
 
 /**
@@ -23,3 +24,10 @@ $routes->get('/', [Dashboard::class, 'index']);
 $routes->get('/chat/(:num)', [Dashboard::class, 'chat']);
 
 $routes->post('/send-message', [Dashboard::class, 'sendMessage']);
+
+$routes->delete('/history/(:num)', [Dashboard::class, 'delete']);
+
+//profile
+$routes->get('/profile', [Profile::class, 'index']);
+$routes->post('/profile', [Profile::class, 'update']);
+$routes->delete('/profile', [Profile::class, 'delete']);

@@ -51,7 +51,7 @@
         }
 
         .markdown-content p {
-            margin-bottom: 1em;
+            /* margin-bottom: 1em; */
         }
 
         .markdown-content ul,
@@ -134,6 +134,19 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const chatMessages = document.getElementById('chat-messages');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+
+        function scrollToBottom() {
+            const chatMessages = document.getElementById('chat-messages');
+            chatMessages.scrollTo({
+                top: chatMessages.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const toggleBtn = document.getElementById('toggleBtn');

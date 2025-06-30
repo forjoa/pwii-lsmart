@@ -95,7 +95,7 @@ class Auth extends BaseController
             'username' => $username,
             'email' => $email,
             'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
-            'profile_picture' => $profilePath,
+            'profile_pic' => $profilePath,
             'created_at' => date('Y-m-d H:i:s')
         ];
 
